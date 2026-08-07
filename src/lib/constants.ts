@@ -1,18 +1,22 @@
 export const SITE_CONFIG = {
-  name: "Bahrain Auto Spa",
+  // Matches Google Business Profile exactly — NAP consistency
+  name: "Sunshine Car Spa",
   tagline: "Premium Car Detailing & Mobile Car Wash in Bahrain",
   description:
-    "Premium mobile car detailing in Bahrain — ceramic coating, paint correction & full details at your home or office. Trusted by 4,500+ clients. Serving all Bahrain.",
+    "Premium mobile car detailing in Bahrain — ceramic coating, paint correction & full details at your home or office. Serving Riffa, Manama & all Bahrain. Book via WhatsApp today.",
   url: "https://sunshinecarspa.com",
   phone: "+97333445566",
   whatsapp: "+97333445566",
   email: "info@sunshinecarspa.com",
+  // Verified Google Business Profile Maps link
   googleMapsUrl:
-    "https://maps.google.com/?q=Bahrain+Auto+Spa+Manama+Bahrain",
-  address: "Manama, Kingdom of Bahrain",
+    "https://www.google.com/maps/place/Sunshine+car+spa/@26.1233280,50.5873392,17z",
+  // Matches Google Business Profile: "4HFQ+7VR, Riffa, Bahrain"
+  address: "Riffa, Kingdom of Bahrain",
+  // Exact coordinates from Google Business Profile embed
   geo: {
-    latitude: 26.2235,
-    longitude: 50.5876,
+    latitude: 26.12332799357012,
+    longitude: 50.58733917418959,
   },
   foundingYear: 2016,
   workingHours: {
@@ -29,8 +33,9 @@ export const SITE_CONFIG = {
     yearsExperience: 8,
     vehiclesCompleted: 12000,
     satisfiedClients: 4500,
-    rating: 4.9,
-    reviewCount: 847,
+    // Real data from Google Business Profile
+    rating: 4.7,
+    reviewCount: 92,
   },
 } as const;
 

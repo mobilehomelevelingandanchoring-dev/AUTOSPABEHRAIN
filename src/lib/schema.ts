@@ -3,7 +3,8 @@ import { SITE_CONFIG, SERVICES, REVIEWS, FAQ_ITEMS, COVERAGE_AREAS } from "./con
 export function generateLocalBusinessSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": ["LocalBusiness", "AutoRepair"],
+    // CarWash matches Google Business Profile category; AutoRepair covers detailing services
+    "@type": ["LocalBusiness", "CarWash", "AutoRepair"],
     "@id": `${SITE_CONFIG.url}/#business`,
     name: SITE_CONFIG.name,
     description: SITE_CONFIG.description,
@@ -23,12 +24,12 @@ export function generateLocalBusinessSchema() {
     hasMap: SITE_CONFIG.googleMapsUrl,
     foundingDate: String(SITE_CONFIG.foundingYear),
     additionalType: "https://www.wikidata.org/entity/Q97631",
+    // Exact address from Google Business Profile: "4HFQ+7VR, Riffa, Bahrain"
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Manama",
-      addressLocality: "Manama",
-      addressRegion: "Capital Governorate",
-      postalCode: "317",
+      streetAddress: "4HFQ+7VR",
+      addressLocality: "Riffa",
+      addressRegion: "Southern Governorate",
       addressCountry: "BH",
     },
     geo: {
@@ -241,7 +242,7 @@ export function generateServicePageSchema(serviceId: string) {
 export function generateLocationPageSchema(area: string) {
   return {
     "@context": "https://schema.org",
-    "@type": ["LocalBusiness", "AutoRepair"],
+    "@type": ["LocalBusiness", "CarWash", "AutoRepair"],
     "@id": `${SITE_CONFIG.url}/#business-${area.toLowerCase().replace(/\s+/g, "-")}`,
     name: `${SITE_CONFIG.name} — ${area}`,
     description: `Premium mobile car detailing in ${area}, Bahrain. We come to you — ceramic coating, paint correction & full details at your home or office.`,
