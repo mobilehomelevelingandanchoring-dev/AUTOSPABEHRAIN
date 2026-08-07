@@ -38,21 +38,33 @@ export const metadata: Metadata = {
   },
   description: SITE_CONFIG.description,
   keywords: [
+    // Primary
     "car detailing Bahrain",
+    "mobile car detailing Bahrain",
+    "car detailing Manama",
     "mobile car wash Bahrain",
+    // Services
     "ceramic coating Bahrain",
     "paint correction Bahrain",
-    "car detailing Manama",
-    "car wash at home Bahrain",
-    "premium car detailing",
-    "auto spa Bahrain",
-    "car polishing Bahrain",
-    "vehicle detailing Bahrain",
     "interior detailing Bahrain",
-    "exterior car detailing",
+    "exterior car detailing Bahrain",
+    "car polishing Bahrain",
+    "auto detailing Bahrain",
+    // Location long-tails
+    "car detailing Riffa",
+    "car detailing Juffair",
+    "car detailing Seef",
+    "car detailing Amwaj Islands",
+    "car detailing Saar",
+    // Intent
+    "car wash at home Bahrain",
+    "mobile car wash at office Bahrain",
     "car cleaning service Bahrain",
-    "mobile detailing Bahrain",
+    "auto spa Bahrain",
     "best car detailing Bahrain",
+    // Arabic transliteration
+    "غسيل سيارات متنقل البحرين",
+    "تلميع سيارات البحرين",
   ],
   authors: [{ name: SITE_CONFIG.name, url: SITE_CONFIG.url }],
   creator: SITE_CONFIG.name,
@@ -66,7 +78,6 @@ export const metadata: Metadata = {
     canonical: SITE_CONFIG.url,
     languages: {
       "en-BH": SITE_CONFIG.url,
-      "ar-BH": `${SITE_CONFIG.url}/ar`,
     },
   },
   openGraph: {

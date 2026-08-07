@@ -1,62 +1,32 @@
 import type { MetadataRoute } from "next";
-import { SITE_CONFIG, SERVICES, COVERAGE_AREAS } from "@/lib/constants";
+import { SITE_CONFIG, SERVICES, COVERAGE_AREAS, areaToSlug } from "@/lib/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = SITE_CONFIG.url;
-  const now = new Date();
+  const base = SITE_CONFIG.url;
 
-  const staticRoutes: MetadataRoute.Sitemap = [
+  return [
+    // Homepage — highest priority
     {
-      url: baseUrl,
-      lastModified: now,
+      url: base,
+      lastModified: new Date("2026-08-07"),
       changeFrequency: "weekly",
       priority: 1.0,
     },
-    {
-      url: `${baseUrl}/services`,
-      lastModified: now,
-      changeFrequency: "weekly",
+
+    // Individual service pages
+    ...SERVICES.map((s) => ({
+      url: `${base}/services/${s.id}`,
+      lastModified: new Date("2026-08-07"),
+      changeFrequency: "monthly" as const,
       priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/gallery`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/privacy`,
-      lastModified: now,
-      changeFrequency: "yearly",
-      priority: 0.2,
-    },
-    {
-      url: `${baseUrl}/terms`,
-      lastModified: now,
-      changeFrequency: "yearly",
-      priority: 0.2,
-    },
+    })),
+
+    // Location landing pages — core local SEO
+    ...COVERAGE_AREAS.map((area) => ({
+      url: `${base}/car-detailing-${areaToSlug(area)}`,
+      lastModified: new Date("2026-08-07"),
+      changeFrequency: "monthly" as const,
+      priority: 0.85,
+    })),
   ];
-
-  const serviceRoutes: MetadataRoute.Sitemap = SERVICES.map((service) => ({
-    url: `${baseUrl}/services/${service.id}`,
-    lastModified: now,
-    changeFrequency: "monthly" as const,
-    priority: 0.85,
-  }));
-
-  const locationRoutes: MetadataRoute.Sitemap = COVERAGE_AREAS.map((area) => ({
-    url: `${baseUrl}/car-detailing-${area.toLowerCase().replace(/\s+/g, "-").replace(/'/g, "")}`,
-    lastModified: now,
-    changeFrequency: "monthly" as const,
-    priority: 0.75,
-  }));
-
-  return [...staticRoutes, ...serviceRoutes, ...locationRoutes];
 }

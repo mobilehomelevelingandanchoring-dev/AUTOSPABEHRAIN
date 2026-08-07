@@ -1,4 +1,4 @@
-import { SITE_CONFIG, SERVICES, REVIEWS, FAQ_ITEMS } from "./constants";
+import { SITE_CONFIG, SERVICES, REVIEWS, FAQ_ITEMS, COVERAGE_AREAS } from "./constants";
 
 export function generateLocalBusinessSchema() {
   return {
@@ -11,36 +11,54 @@ export function generateLocalBusinessSchema() {
     telephone: SITE_CONFIG.phone,
     email: SITE_CONFIG.email,
     image: `${SITE_CONFIG.url}/images/og-image.jpg`,
-    logo: `${SITE_CONFIG.url}/images/logo.png`,
+    logo: {
+      "@type": "ImageObject",
+      url: `${SITE_CONFIG.url}/images/logo.png`,
+      width: 200,
+      height: 60,
+    },
     priceRange: "$$",
     currenciesAccepted: "BHD",
     paymentAccepted: "Cash, Credit Card, Bank Transfer",
-    areaServed: {
-      "@type": "Country",
-      name: "Bahrain",
-    },
+    hasMap: SITE_CONFIG.googleMapsUrl,
+    foundingDate: String(SITE_CONFIG.foundingYear),
+    additionalType: "https://www.wikidata.org/entity/Q97631",
     address: {
       "@type": "PostalAddress",
       streetAddress: "Manama",
       addressLocality: "Manama",
       addressRegion: "Capital Governorate",
+      postalCode: "317",
       addressCountry: "BH",
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: 26.2235,
-      longitude: 50.5876,
+      latitude: SITE_CONFIG.geo.latitude,
+      longitude: SITE_CONFIG.geo.longitude,
+    },
+    // All 15 Bahrain areas we serve, plus country-level
+    areaServed: [
+      { "@type": "Country", name: "Bahrain" },
+      ...COVERAGE_AREAS.map((area) => ({
+        "@type": "City",
+        name: area,
+        containedInPlace: { "@type": "Country", name: "Bahrain" },
+      })),
+    ],
+    // Radius-based service area covering all of Bahrain
+    serviceArea: {
+      "@type": "GeoCircle",
+      geoMidpoint: {
+        "@type": "GeoCoordinates",
+        latitude: SITE_CONFIG.geo.latitude,
+        longitude: SITE_CONFIG.geo.longitude,
+      },
+      geoRadius: "50000",
     },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"],
-        opens: "07:00",
-        closes: "20:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: "Thursday",
+        dayOfWeek: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
         opens: "07:00",
         closes: "20:00",
       },
@@ -58,24 +76,19 @@ export function generateLocalBusinessSchema() {
       bestRating: 5,
       worstRating: 1,
     },
-    review: REVIEWS.slice(0, 3).map((r) => ({
+    review: REVIEWS.map((r) => ({
       "@type": "Review",
-      author: {
-        "@type": "Person",
-        name: r.name,
-      },
+      author: { "@type": "Person", name: r.name },
       reviewRating: {
         "@type": "Rating",
         ratingValue: r.rating,
         bestRating: 5,
+        worstRating: 1,
       },
       reviewBody: r.review,
-      datePublished: new Date().toISOString().split("T")[0],
+      datePublished: r.date,
     })),
-    sameAs: [
-      SITE_CONFIG.social.instagram,
-      SITE_CONFIG.social.facebook,
-    ],
+    sameAs: Object.values(SITE_CONFIG.social),
   };
 }
 
@@ -92,12 +105,24 @@ export function generateOrganizationSchema() {
       width: 200,
       height: 60,
     },
-    contactPoint: {
-      "@type": "ContactPoint",
-      telephone: SITE_CONFIG.phone,
-      contactType: "customer service",
-      availableLanguage: ["English", "Arabic"],
-    },
+    foundingDate: String(SITE_CONFIG.foundingYear),
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: SITE_CONFIG.phone,
+        contactType: "customer service",
+        contactOption: "TollFree",
+        availableLanguage: ["English", "Arabic"],
+        areaServed: "BH",
+      },
+      {
+        "@type": "ContactPoint",
+        telephone: SITE_CONFIG.whatsapp,
+        contactType: "sales",
+        availableLanguage: ["English", "Arabic"],
+        areaServed: "BH",
+      },
+    ],
     sameAs: Object.values(SITE_CONFIG.social),
   };
 }
@@ -109,20 +134,36 @@ export function generateServiceSchema() {
     "@id": `${SITE_CONFIG.url}/services/${service.id}`,
     name: service.name,
     description: service.description,
+    url: `${SITE_CONFIG.url}/services/${service.id}`,
     provider: {
       "@type": "LocalBusiness",
       "@id": `${SITE_CONFIG.url}/#business`,
       name: SITE_CONFIG.name,
+      telephone: SITE_CONFIG.phone,
     },
-    areaServed: {
-      "@type": "Country",
-      name: "Bahrain",
+    areaServed: { "@type": "Country", name: "Bahrain" },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: service.name,
+      itemListElement: service.features.map((f, i) => ({
+        "@type": "Offer",
+        position: i + 1,
+        name: f,
+      })),
     },
     offers: {
       "@type": "Offer",
       price: service.price,
       priceCurrency: "BHD",
       availability: "https://schema.org/InStock",
+      validFrom: `${SITE_CONFIG.foundingYear}-01-01`,
+      priceValidUntil: "2027-12-31",
+      url: `${SITE_CONFIG.url}/services/${service.id}`,
+    },
+    additionalProperty: {
+      "@type": "PropertyValue",
+      name: "Duration",
+      value: service.duration,
     },
   }));
 }
@@ -164,13 +205,65 @@ export function generateWebsiteSchema() {
     "@id": `${SITE_CONFIG.url}/#website`,
     url: SITE_CONFIG.url,
     name: SITE_CONFIG.name,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE_CONFIG.url}/search?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
+    description: SITE_CONFIG.description,
+    inLanguage: "en-BH",
+    publisher: {
+      "@type": "Organization",
+      "@id": `${SITE_CONFIG.url}/#organization`,
+    },
+  };
+}
+
+export function generateServicePageSchema(serviceId: string) {
+  const service = SERVICES.find((s) => s.id === serviceId);
+  if (!service) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${SITE_CONFIG.url}/services/${service.id}`,
+    name: `${service.name} in Bahrain`,
+    description: service.description,
+    provider: {
+      "@type": "LocalBusiness",
+      "@id": `${SITE_CONFIG.url}/#business`,
+      name: SITE_CONFIG.name,
+    },
+    areaServed: { "@type": "Country", name: "Bahrain" },
+    offers: {
+      "@type": "Offer",
+      price: service.price,
+      priceCurrency: "BHD",
+      availability: "https://schema.org/InStock",
+    },
+  };
+}
+
+export function generateLocationPageSchema(area: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "AutoRepair"],
+    "@id": `${SITE_CONFIG.url}/#business-${area.toLowerCase().replace(/\s+/g, "-")}`,
+    name: `${SITE_CONFIG.name} — ${area}`,
+    description: `Premium mobile car detailing in ${area}, Bahrain. We come to you — ceramic coating, paint correction & full details at your home or office.`,
+    url: SITE_CONFIG.url,
+    telephone: SITE_CONFIG.phone,
+    email: SITE_CONFIG.email,
+    areaServed: {
+      "@type": "City",
+      name: area,
+      containedInPlace: { "@type": "Country", name: "Bahrain" },
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: SITE_CONFIG.geo.latitude,
+      longitude: SITE_CONFIG.geo.longitude,
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: SITE_CONFIG.stats.rating,
+      reviewCount: SITE_CONFIG.stats.reviewCount,
+      bestRating: 5,
+      worstRating: 1,
     },
   };
 }
