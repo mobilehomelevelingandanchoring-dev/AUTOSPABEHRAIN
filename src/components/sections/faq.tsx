@@ -160,7 +160,7 @@ export function FAQ() {
             Still have a question?
           </p>
           <a
-            href="https://wa.me/97333445566?text=Hi! I have a question about your detailing services."
+            href="https://wa.me/97334678435?text=Hi! I have a question about your detailing services."
             target="_blank"
             rel="noopener noreferrer"
             className={cn(

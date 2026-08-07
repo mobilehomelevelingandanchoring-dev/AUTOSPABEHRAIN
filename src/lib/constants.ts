@@ -5,8 +5,8 @@ export const SITE_CONFIG = {
   description:
     "Premium mobile car detailing in Bahrain — ceramic coating, paint correction & full details at your home or office. Serving Riffa, Manama & all Bahrain. Book via WhatsApp today.",
   url: "https://sunshinecarspa.com",
-  phone: "+97333445566",
-  whatsapp: "+97333445566",
+  phone: "+97334678435",
+  whatsapp: "+97334678435",
   email: "info@sunshinecarspa.com",
   // Verified Google Business Profile Maps link
   googleMapsUrl:
