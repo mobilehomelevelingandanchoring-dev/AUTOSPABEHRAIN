@@ -1,21 +1,51 @@
+import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/constants";
 import { generateFAQSchema, generateServiceSchema } from "@/lib/schema";
+
+// Above-fold: statically imported — included in the initial JS bundle
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Hero } from "@/components/sections/hero";
-import { Services } from "@/components/sections/services";
-import { BeforeAfter } from "@/components/sections/before-after";
-import { Gallery } from "@/components/sections/gallery";
-import { Reviews } from "@/components/sections/reviews";
-import { Pricing } from "@/components/sections/pricing";
 import { HowItWorks } from "@/components/sections/how-it-works";
+import { Services } from "@/components/sections/services";
 import { WhyChooseUs } from "@/components/sections/why-choose-us";
-import { FAQ } from "@/components/sections/faq";
-import { Booking } from "@/components/sections/booking";
-import { Coverage } from "@/components/sections/coverage";
-import { FinalCTA } from "@/components/sections/final-cta";
-import { FloatingCTA, MobileBookingBar } from "@/components/common/floating-cta";
+
+// Below-fold: dynamically imported — split into separate JS chunks loaded on demand
+const BeforeAfter = dynamic(() =>
+  import("@/components/sections/before-after").then((m) => ({ default: m.BeforeAfter }))
+);
+const Reviews = dynamic(() =>
+  import("@/components/sections/reviews").then((m) => ({ default: m.Reviews }))
+);
+const Pricing = dynamic(() =>
+  import("@/components/sections/pricing").then((m) => ({ default: m.Pricing }))
+);
+const Gallery = dynamic(() =>
+  import("@/components/sections/gallery").then((m) => ({ default: m.Gallery }))
+);
+const Coverage = dynamic(() =>
+  import("@/components/sections/coverage").then((m) => ({ default: m.Coverage }))
+);
+const FAQ = dynamic(() =>
+  import("@/components/sections/faq").then((m) => ({ default: m.FAQ }))
+);
+const Booking = dynamic(() =>
+  import("@/components/sections/booking").then((m) => ({ default: m.Booking }))
+);
+const FinalCTA = dynamic(() =>
+  import("@/components/sections/final-cta").then((m) => ({ default: m.FinalCTA }))
+);
+
+// Floating UI: deferred — not needed until after page mount
+const FloatingCTA = dynamic(
+  () => import("@/components/common/floating-cta").then((m) => ({ default: m.FloatingCTA })),
+  { ssr: false }
+);
+const MobileBookingBar = dynamic(
+  () => import("@/components/common/floating-cta").then((m) => ({ default: m.MobileBookingBar })),
+  { ssr: false }
+);
 
 export const metadata: Metadata = {
   title: `${SITE_CONFIG.name} | #1 Mobile Car Detailing in Bahrain`,
@@ -48,46 +78,26 @@ export default function HomePage() {
       <Navbar />
 
       <main id="main-content" tabIndex={-1}>
-        {/* 1. Hero */}
+        {/* Above fold — static */}
         <Hero />
-
-        {/* 2. How It Works */}
         <HowItWorks />
-
-        {/* 3. Services */}
         <Services />
-
-        {/* 4. Before & After */}
-        <BeforeAfter />
-
-        {/* 5. Why Choose Us */}
         <WhyChooseUs />
 
-        {/* 6. Reviews */}
+        {/* Below fold — dynamically loaded */}
+        <BeforeAfter />
         <Reviews />
-
-        {/* 7. Pricing */}
         <Pricing />
-
-        {/* 8. Gallery */}
         <Gallery />
-
-        {/* 9. Coverage Areas */}
         <Coverage />
-
-        {/* 10. FAQ */}
         <FAQ />
-
-        {/* 11. Booking */}
         <Booking />
-
-        {/* 12. Final CTA */}
         <FinalCTA />
       </main>
 
       <Footer />
 
-      {/* Floating CTAs */}
+      {/* Deferred floating UI — mounted client-side only */}
       <FloatingCTA />
       <MobileBookingBar />
     </>
