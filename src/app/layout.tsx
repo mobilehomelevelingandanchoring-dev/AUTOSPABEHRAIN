@@ -103,7 +103,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "googleb7d79ba7b0fa42b4",
   },
 };
 
