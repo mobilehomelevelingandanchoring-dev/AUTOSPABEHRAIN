@@ -37,14 +37,12 @@ const FinalCTA = dynamic(() =>
   import("@/components/sections/final-cta").then((m) => ({ default: m.FinalCTA }))
 );
 
-// Floating UI: deferred — not needed until after page mount
-const FloatingCTA = dynamic(
-  () => import("@/components/common/floating-cta").then((m) => ({ default: m.FloatingCTA })),
-  { ssr: false }
+// Floating UI: deferred — components are "use client" so no SSR happens anyway
+const FloatingCTA = dynamic(() =>
+  import("@/components/common/floating-cta").then((m) => ({ default: m.FloatingCTA }))
 );
-const MobileBookingBar = dynamic(
-  () => import("@/components/common/floating-cta").then((m) => ({ default: m.MobileBookingBar })),
-  { ssr: false }
+const MobileBookingBar = dynamic(() =>
+  import("@/components/common/floating-cta").then((m) => ({ default: m.MobileBookingBar }))
 );
 
 export const metadata: Metadata = {
