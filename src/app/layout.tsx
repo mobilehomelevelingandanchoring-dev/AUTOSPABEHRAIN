@@ -89,7 +89,7 @@ export const metadata: Metadata = {
     description: SITE_CONFIG.description,
     images: [
       {
-        url: "/images/og-image.jpg",
+        url: "/images/og-image.webp",
         width: 1200,
         height: 630,
         alt: `${SITE_CONFIG.name} - Premium Car Detailing in Bahrain`,
@@ -100,7 +100,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE_CONFIG.name} | Premium Car Detailing in Bahrain`,
     description: SITE_CONFIG.description,
-    images: ["/images/og-image.jpg"],
+    images: ["/images/og-image.webp"],
   },
   robots: {
     index: true,

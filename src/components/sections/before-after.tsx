@@ -1,48 +1,49 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface BeforeAfterItem {
   label: string;
-  before: { alt: string; gradient: string };
-  after: { alt: string; gradient: string };
+  before: { src: string; alt: string };
+  after: { src: string; alt: string };
 }
 
 const EXAMPLES: BeforeAfterItem[] = [
   {
-    label: "Exterior Detail",
+    label: "Car Wash",
     before: {
-      alt: "Car before exterior detailing — dull, dirty paint with swirl marks",
-      gradient: "from-[#2a2118] to-[#1a1510]",
+      src: "/images/toyota-land-cruiser-foam-wash-before-bahrain.webp",
+      alt: "Toyota Land Cruiser before wash — covered in foam at Sunshine Car Spa Bahrain",
     },
     after: {
-      alt: "Car after exterior detailing — gleaming, mirror-like paint finish",
-      gradient: "from-[#1c1c1e] to-[#0a0a0a]",
+      src: "/images/toyota-land-cruiser-after-wash-clean-sunshine-car-spa.webp",
+      alt: "Toyota Land Cruiser after professional wash — spotless clean result at Sunshine Car Spa Bahrain",
     },
   },
   {
     label: "Interior Detail",
     before: {
-      alt: "Car interior before detailing — dusty dashboard and stained seats",
-      gradient: "from-[#2a2010] to-[#1a1408]",
+      src: "/images/car-interior-detailing-team-sunshine-car-spa-bahrain.webp",
+      alt: "Interior detailing in progress — Sunshine Car Spa team deep cleaning car cabin Bahrain",
     },
     after: {
-      alt: "Car interior after detailing — spotless, like-new cabin",
-      gradient: "from-[#141414] to-[#0a0a0a]",
+      src: "/images/car-interior-cleaning-leather-conditioning-bahrain.webp",
+      alt: "Car interior after professional leather conditioning — spotless, like-new cabin at Sunshine Car Spa Bahrain",
     },
   },
   {
-    label: "Paint Correction",
+    label: "Foam Wash",
     before: {
-      alt: "Car paint before correction — covered in swirl marks and scratches",
-      gradient: "from-[#252525] to-[#161616]",
+      src: "/images/toyota-land-cruiser-full-foam-wash-riffa-bahrain.webp",
+      alt: "Toyota Land Cruiser fully covered in foam wash — Sunshine Car Spa Riffa Bahrain",
     },
     after: {
-      alt: "Car paint after correction — perfectly clear, swirl-free finish",
-      gradient: "from-[#1a1a1a] to-[#080808]",
+      src: "/images/nissan-after-car-wash-clean-sunshine-car-spa-bahrain.webp",
+      alt: "Nissan after full foam wash — gleaming clean result at Sunshine Car Spa Bahrain",
     },
   },
 ];
@@ -110,64 +111,41 @@ function Slider({ item }: { item: BeforeAfterItem }) {
       role="img"
     >
       {/* BEFORE */}
-      <div
-        className={cn(
-          "absolute inset-0 bg-gradient-to-br",
-          item.before.gradient,
-          "flex items-center justify-center"
-        )}
-        aria-hidden="true"
-      >
-        <div className="text-center">
-          <div className="text-4xl mb-2">🚗</div>
-          <div className="text-[#636366] text-xs uppercase tracking-widest font-medium">
-            Before
-          </div>
-        </div>
-        {/* Simulated dirt texture */}
-        <div className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: "radial-gradient(circle at 20% 30%, rgba(139,90,43,0.3) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(100,70,30,0.2) 0%, transparent 40%)",
-          }}
-          aria-hidden="true"
+      <div className="absolute inset-0" aria-hidden="true">
+        <Image
+          src={item.before.src}
+          alt={item.before.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 896px"
+          draggable={false}
         />
-        <div className="absolute bottom-4 left-4 right-4 bg-black/50 backdrop-blur-sm rounded-lg p-3" aria-hidden="true">
-          <p className="text-[#8e8e93] text-xs leading-relaxed">
-            {item.before.alt}
-          </p>
-        </div>
+        <div className="absolute inset-0 bg-black/20" />
       </div>
 
       {/* AFTER — clipped */}
       <div
-        className={cn(
-          "absolute inset-0 bg-gradient-to-br",
-          item.after.gradient,
-          "flex items-center justify-center"
-        )}
+        className="absolute inset-0"
         style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
         aria-hidden="true"
       >
-        <div className="text-center">
-          <div className="text-4xl mb-2">✨</div>
-          <div className="text-[#d4af37] text-xs uppercase tracking-widest font-medium">
-            After
-          </div>
-        </div>
-        {/* Simulated shine */}
+        <Image
+          src={item.after.src}
+          alt={item.after.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 896px"
+          draggable={false}
+        />
+        <div className="absolute inset-0 bg-black/10" />
+        {/* Gold shimmer overlay on after side */}
         <div
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-10"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 50% 30%, rgba(212,175,55,0.4) 0%, transparent 60%)",
+              "radial-gradient(circle at 50% 30%, rgba(212,175,55,0.6) 0%, transparent 60%)",
           }}
-          aria-hidden="true"
         />
-        <div className="absolute bottom-4 left-4 right-4 bg-black/50 backdrop-blur-sm rounded-lg p-3" aria-hidden="true">
-          <p className="text-[#d4af37] text-xs leading-relaxed">
-            {item.after.alt}
-          </p>
-        </div>
       </div>
 
       {/* Divider Line */}
@@ -214,7 +192,7 @@ function Slider({ item }: { item: BeforeAfterItem }) {
 
       {/* Drag hint */}
       <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
         style={{ opacity: sliderPos === 50 && !isDragging ? 1 : 0, transition: "opacity 0.4s" }}
         aria-hidden="true"
       >
@@ -306,7 +284,7 @@ export function BeforeAfter() {
           viewport={{ once: true }}
           className="text-center text-xs text-[#48484a] mt-6"
         >
-          All results are from real Bahrain Auto Spa customers
+          All results are from real Sunshine Car Spa customers in Bahrain
         </motion.p>
       </div>
     </section>

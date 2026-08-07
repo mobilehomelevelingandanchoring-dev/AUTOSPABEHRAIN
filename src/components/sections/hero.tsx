@@ -1,13 +1,14 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Star, Shield, Award, ChevronDown, Phone, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE_CONFIG } from "@/lib/constants";
 
 const TRUST_BADGES = [
-  { icon: Star, label: "4.9 Rating", sub: "847 Reviews" },
+  { icon: Star, label: `${SITE_CONFIG.stats.rating} Rating`, sub: `${SITE_CONFIG.stats.reviewCount} Reviews` },
   { icon: Shield, label: "8+ Years", sub: "In Business" },
   { icon: Award, label: "12,000+", sub: "Vehicles Detailed" },
 ] as const;
@@ -86,27 +87,29 @@ export function Hero() {
         className="absolute inset-0 z-0"
         aria-hidden="true"
       >
-        {/* Dark gradient base */}
-        <div className="absolute inset-0 bg-[#0a0a0a]" />
-
-        {/* Radial glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(212,175,55,0.08)_0%,transparent_60%)]" />
-
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
-
-        {/* Subtle grid */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-            backgroundSize: "80px 80px",
-          }}
+        {/* Real photo — Sunshine Car Spa storefront Riffa Bahrain */}
+        <Image
+          src="/images/sunshine-car-spa-riffa-bahrain-storefront.webp"
+          alt="Sunshine Car Spa — professional car wash and detailing centre in Riffa, Bahrain"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+          quality={85}
         />
 
+        {/* Dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-[#0a0a0a]/80" />
+
+        {/* Radial gold glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(212,175,55,0.12)_0%,transparent_60%)]" />
+
+        {/* Bottom fade to page bg */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+
         {/* Floating orbs */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-[#d4af37]/[0.03] blur-[100px]" />
-        <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] rounded-full bg-[#d4af37]/[0.04] blur-[120px]" />
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-[#d4af37]/[0.04] blur-[100px]" />
+        <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] rounded-full bg-[#d4af37]/[0.05] blur-[120px]" />
       </motion.div>
 
       {/* Content */}
@@ -177,7 +180,7 @@ export function Hero() {
             <div className="flex flex-col items-start gap-0.5">
               <StarRating />
               <span className="text-xs text-[#636366]">
-                <span className="font-semibold text-[#f5f5f7]">4.9/5</span> from {SITE_CONFIG.stats.reviewCount}+ happy clients
+                <span className="font-semibold text-[#f5f5f7]">{SITE_CONFIG.stats.rating}/5</span> from {SITE_CONFIG.stats.reviewCount}+ happy clients
               </span>
             </div>
           </motion.div>
@@ -243,7 +246,7 @@ export function Hero() {
             >
               <StatsCounter value="12K+" label="Vehicles Detailed" delay={0.5} />
               <div className="border-l border-white/[0.08] pl-4 sm:pl-8">
-                <StatsCounter value="4.9★" label="Average Rating" delay={0.55} />
+                <StatsCounter value={`${SITE_CONFIG.stats.rating}★`} label="Average Rating" delay={0.55} />
               </div>
               <div className="border-l border-white/[0.08] pl-4 sm:pl-8">
                 <StatsCounter value="8+" label="Years Experience" delay={0.6} />
