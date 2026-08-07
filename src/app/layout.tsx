@@ -114,7 +114,10 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "googleb7d79ba7b0fa42b4",
+    google: [
+      "googleb7d79ba7b0fa42b4",
+      "-qeZDA4Wi0_B0dKPS4irHbsD-4UPuJ0o980pd3bQb1A",
+    ],
   },
   icons: {
     icon: [
